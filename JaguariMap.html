@@ -1,82 +1,82 @@
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Jaguari Map</title>
-  <style>
-    html, body, #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 79%;
-      width: 100%;
-    }
-  </style>
+  <head>
   
-    <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.14/"></script>
-  
-  <script>  
-    require([
-      "esri/Map",
-      "esri/views/MapView",
-      "esri/layers/FeatureLayer"
-    ], function(Map, MapView, FeatureLayer) {
-
-      var map = new Map({
-        basemap: "topo-vector"
-      });
-
-      var view = new MapView({
-        container: "viewDiv",
-        map: map,
-        center: [-46.900, -22.785],
-        zoom: 10.97
-      });
-      
-      
-      // Trails feature layer (lines)
-      var trailsLayer = new FeatureLayer({
-        url: "https://services7.arcgis.com/XSGwNGbwbJXONCSU/arcgis/rest/services/rio_jaguari_brazil/FeatureServer/0?token=wpwIHCoZ2lqRdaWzZz2543jkjSWP0hdEhfxlLVeqVsbjNB7iTu8z4zSbboa_bSHGvMeuLLUl9G686f9rXWL37oJ4iQ2gx2kKowljEy3X6tQiEpHjfykFAnlkk7oE8Rmo3UwRoXJNypHwKaUpxINDpAwEW2WGJljsi5OvPA1TeKfeQQQnr7NnBDXA7WtqAK-0FWRSkSBnNEDLFY5sckjZdS-4wZwIbqSPHV_R_BnehCY."
-      });
-
-      map.add(trailsLayer, 0);
-
-      //Trails feature layer (lines)
-      var trailsLayer = new FeatureLayer({
-        url: "https://services1.arcgis.com/RTK5Unh1Z71JKIiR/arcgis/rest/services/Br_river/FeatureServer/0"
-      });
-
-      map.add(trailsLayer, 0);
-
-      
-
-      
-      var coordsWidget = document.createElement("div");
-      coordsWidget.id = "coordsWidget";
-      coordsWidget.className = "esri-widget esri-component";
-      coordsWidget.style.padding = "7px 10px 5px";
-
-      view.ui.add(coordsWidget, "bottom-right");
-      
-      //*** ADD ***//
-      function showCoordinates(pt) {
-        var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) +
-            " | Scale 1:" + Math.round(view.scale * 1) / 1;
-        coordsWidget.innerHTML = coords;
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+    <title>Jaguari Map</title>
+    
+    <style>
+      html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 79%;
+        width: 100%;
       }
-    view.watch("stationary", function(isStationary) {
-        showCoordinates(view.center);
-      });
-
-      view.on("pointer-move", function(evt) {
-        showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
-      });
-
-    });
-  </script>
-</head>
-<body>
-  <div id="viewDiv"></div>
+    </style>
+    
+    <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.14/"></script>
+    
+    <script>  
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer"
+      ], function(Map, MapView, FeatureLayer) {
   
-</body>
+        var map = new Map({
+          basemap: "topo-vector"
+        });
+  
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [-46.850, -22.795],
+          zoom: 10.97
+        });
+        
+        // Jaguari feature layer (lines)
+        var jaguariLayer = new FeatureLayer({
+          url: "https://services1.arcgis.com/RTK5Unh1Z71JKIiR/arcgis/rest/services/Br_river/FeatureServer/0"
+        });
+  
+        map.add(jaguariLayer, 0);
+        
+        // BR rivers feature layer (lines)
+        var riversLayer = new FeatureLayer({
+          url: "https://services7.arcgis.com/XSGwNGbwbJXONCSU/arcgis/rest/services/rio_jaguari_brazil/FeatureServer/0?token=wpwIHCoZ2lqRdaWzZz2543jkjSWP0hdEhfxlLVeqVsbjNB7iTu8z4zSbboa_bSHGvMeuLLUl9G686f9rXWL37oJ4iQ2gx2kKowljEy3X6tQiEpHjfykFAnlkk7oE8Rmo3UwRoXJNypHwKaUpxINDpAwEW2WGJljsi5OvPA1TeKfeQQQnr7NnBDXA7WtqAK-0FWRSkSBnNEDLFY5sckjZdS-4wZwIbqSPHV_R_BnehCY."
+        });
+  
+        map.add(riversLayer, 0);     
+  
+        
+        var coordsWidget = document.createElement("div");
+        coordsWidget.id = "coordsWidget";
+        coordsWidget.className = "esri-widget esri-component";
+        coordsWidget.style.padding = "7px 10px 5px";
+  
+        view.ui.add(coordsWidget, "bottom-right");
+        
+        //*** Coordinates ***//
+        function showCoordinates(pt) {
+          var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) +
+              " | Scale 1:" + Math.round(view.scale * 1) / 1;
+          coordsWidget.innerHTML = coords;
+        }
+      view.watch("stationary", function(isStationary) {
+          showCoordinates(view.center);
+        });
+  
+        view.on("pointer-move", function(evt) {
+          showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
+        });
+  
+      });
+    </script>
+  </head>
+  
+  <body>
+    <div id="viewDiv"></div>
+  </body>
 </html>
