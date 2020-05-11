@@ -1,1 +1,1 @@
-function
+var function;
